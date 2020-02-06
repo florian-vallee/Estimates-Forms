@@ -1,4 +1,4 @@
-# Estimate-Forms
+# Estimates-Forms
 Wordpress plugin create to make some price estimation forms. Un plugin Wordpress créé pour mettre en place des devis.
 
 # Description du projet/Project description
