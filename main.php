@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: Estimation Form
+Plugin Name: Estimates Form
 Description: Un plugin dont la fonctionnalité se résume en une création de formulaire, ayant des champs auxquels ont peut attribuer des valeurs, pour ainsi appliquer des calculs et obtenir un résultat. Très pratique pour façonner des formulaire qui sont semblablent à une estimation, un peu comme un devis.
 Version: 0.2
 Author: Florian Vallée
@@ -169,7 +169,7 @@ class Ef_core_plugin
     {
         add_menu_page(
             'Accueil',
-            'Estimation Form',
+            'Estimates Form',
             'manage_options',
             'ef_menu',
             array($this, 'ef_menu_html')
@@ -568,11 +568,11 @@ class Ef_core_plugin
         global $wpdb;        
         
         // On initialise un tableau qui contient les données des différentes options de la table wp_ef_formulaire_settings.
-        $form_option = "SELECT * FROM `wp_ef_formulaire_settings`";
+        $form_option = "SELECT * FROM `{$wpdb->prefix}ef_formulaire_settings`";
         $form_datas = $wpdb->get_results($form_option);
 
         // On initialise un tableau qui contient les données des différentes options de la table wp_ef_formulaire_settings.
-        $input_option = "SELECT * FROM `wp_ef_input_settings`";
+        $input_option = "SELECT * FROM `{$wpdb->prefix}ef_input_settings`";
         $input_datas = $wpdb->get_results($input_option);
 
         // On initialise un conteur pour le nombre de configuration, un autre pour le nombre d'input. 
@@ -715,6 +715,21 @@ class Ef_core_plugin
                                                                 <div class="col"><label for="id_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">ID de l'input:</label></div>
                                                                 <div class="col"><input type="text" name="id_input" id="id_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>" value="<?php echo $data_input->id_input; ?>"></div>
                                                             </div>
+                                                            <?php 
+                                                            if ($data_input->input_type === "select") {
+                                                                ?>
+                                                                <div class="d-flex mb-2">
+                                                                <div class="col"><label for="option_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">Ajouter des options pour le select:</label></div>
+                                                                <div class="col">
+                                                                    <input type="text" name="option_input" id="option_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>" value="<?php echo $data_input->option_input; ?>">
+                                                                    <p style="weight: 150px;">Respecter bien le format pour les options, option1-option2-...</p>
+                                                                </div>
+                                                                
+                                                                </div>
+                                                                <?php
+                                                            }
+                                                            ?>
+                                                            
                                                             <div class="d-flex mb-2">
                                                                 <div>
                                                                     <input type="text" name="update_by_input_id" id="update_by_input_id-<?php echo $nbr_config . "_" . $nbr_compt; ?>" value="<?php echo $data_input->id_input; ?>" hidden>
@@ -722,6 +737,7 @@ class Ef_core_plugin
                                                                     <input class="btn-primary btn" type="submit" value="Mettre à jours l'input n°<?php echo $nbr_compt; ?>.">
                                                                 </div>
                                                             </div>
+                                                            
                                                         </form>
 
                                                         <div class="col text-right">
@@ -822,13 +838,19 @@ class Ef_core_plugin
             $new_value  = $_POST['value_input'];
             $new_type   = $_POST['type_input'];
             $new_css    = $_POST['css_input'];
+            $new_option = $_POST['option_input'];
             if (empty($new_value)) {
                  $new_value = 0;
              }
-            $sql        = "UPDATE {$wpdb->prefix}ef_input_settings SET `id_input`= '{$new_id}',`nom`= '{$new_name}',`input_type`= '{$new_type}',`input_valeur`= {$new_value},`css_class`= '{$new_css}' WHERE `id_input`= '{$old_id}'";
+            $sql = "UPDATE {$wpdb->prefix}ef_input_settings SET `id_input`= '{$new_id}',`nom`= '{$new_name}',`input_type`= '{$new_type}',`input_valeur`= {$new_value},`css_class`= '{$new_css}' WHERE `id_input`= '{$old_id}'";
             $wpdb->query($sql);
-            // IF $new_value empty alors vaut zero
-            // Sinon transforme chaine en int
+
+            // On vérifie si il y as des option de rentrée
+            if (isset($new_option)) {
+                
+                $request = "UPDATE {$wpdb->prefix}ef_input_settings SET `option_input`= '{$new_option}' WHERE `id_input`= '{$old_id}'";
+                $wpdb->query($request);
+            }
         }
         wp_redirect(admin_url('admin.php?page=ef_submenu_editor'));
         die();
@@ -860,7 +882,7 @@ class Ef_core_plugin
         $jquery_dir = plugins_url('assets/js/jquery-3.4.1.js', __FILE__);
 
         $bootstrap_js = 'bootstrap_js';
-        $bootstrap_js_dir = plugins_url('assets/js/bootstrap.bundle.js', __FILE__);
+        $bootstrap_js_dir = plugins_url('assets/js/bootstrap.min.js', __FILE__);
 
         $bootstrap_css = 'bootstrap_css';
         $bootstrap_css_dir = plugins_url('assets/css/bootstrap.css', __FILE__);
@@ -880,9 +902,19 @@ class Ef_core_plugin
     public function add_plugin_assets()
     {
         $dir_css = plugins_url('assets/css/plugin.css', __FILE__);
+        $dir_bootstrap_css = plugins_url('assets/css/bootstrap.css', __FILE__);
+        $dir_bootstrap_toggle_js = plugins_url('assets/js/bootstrap-toggle.min.js', __FILE__);
         $dir_js = plugins_url('assets/js/plugin.js', __FILE__);
+        $dir_jquery_js = plugins_url('assets/js/jquery-3.4.1.js', __FILE__);
+        $dir_bootstrap_js = plugins_url('assets/js/bootstrap.min.js', __FILE__);
+        $dir_bootstrap_toggle_css = plugins_url('assets/css/bootstrap-toggle.min.css', __FILE__);
 
         wp_enqueue_script('plugin_js', $dir_js);
+        wp_enqueue_script('plugin_bootstrap_js', $dir_bootstrap_js);
+        wp_enqueue_script('plugin_bootstrap_toggle_js', $dir_bootstrap_toggle_js);
+        wp_enqueue_script('plugin_jquery.js', $dir_jquery_js);
+        wp_enqueue_style('plugin_bootstrap_toggle_css', $dir_bootstrap_toggle_css);
+        wp_enqueue_style('plugin_css', $dir_css);
         wp_enqueue_style('plugin_css', $dir_css);
     }
 
