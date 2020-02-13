@@ -45,7 +45,7 @@ class Ef_widget extends WP_Widget {
             echo $args['after_title'];
 
             ?>
-            <div id="container_form">
+            <div id="container_form" class="container">
                 <form method="POST" action="" id="<?php echo $data_form->id_form; ?>" class="<?php echo $data_form->css_class; ?> pb-2">
                     <p><?php echo $instance['description'] ?></p>
                     <?php 
@@ -64,7 +64,7 @@ class Ef_widget extends WP_Widget {
                                         <input hidden type="<?php echo $data_input->input_type; ?>" name="<?php echo $data_input->id_input; ?>" id="<?php echo $data_input->id_input ?>">
                                         <input type="hidden" id="hidden_<?php echo $data_input->id_input ?>" value="<?php echo $data_input->input_valeur; ?>">
                                     
-                                        <button type="button" name="<?php echo $data_input->id_input; ?>" id="<?php echo $data_input->id_input;?>-btn" style="width: 50px; height: 40px;" class="btn btn-danger" onclick="toggle(this)">Non</button>
+                                        <button type="button" name="<?php echo $data_input->id_input; ?>" id="<?php echo $data_input->id_input;?>-btn" class="btn btn-danger" onclick="toggle(this)">Non</button>
                                     </div>                                    
                                     <?php
                                     break;
@@ -154,7 +154,7 @@ class Ef_widget extends WP_Widget {
                         </div>
                         <div class="col-8">
                            
-                            <p id="total_area" class="mt-auto mb-auto">---------</p>
+                            <p id="total_area" class="mt-auto mb-auto"> 0€ </p>
                         
                         </div>
                     </div>
