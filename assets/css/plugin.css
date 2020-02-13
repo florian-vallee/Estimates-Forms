@@ -10,3 +10,11 @@
     margin-top: 1em;
     margin-bottom: 1em;
 }
+.widget{
+    background-color: #39848c;
+    border-radius: 5px;
+    color: white!important;
+}
+.widget-title{
+    text-align: center;
+}
