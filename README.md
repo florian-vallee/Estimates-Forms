@@ -13,3 +13,11 @@ The idea ? Create a Wordpress plugins.</br>
 This plugin will allow an user to build, through the management and creation interface located in the back office of Wordpress, some forms.</br>
 This forms are particular, the purpose is to make price estimates. Users create their owns configurate forms with some inputs, and when they displays it on a web page forms can be manage by some web users to show them price and cost of the different inputs.</br>
 Every inputs add on forms have a value that can be manage into a total value. It's a kind of a service's price estimates.
+
+# Installation 
+<h2>Via Wordpress</h2>
+Pour installer le plugin, télécharger les fichiers. Compresser les fichiers dans une archive <strong>.zip ou .rar</strong>. Ensuite rendez-vous sur l'interface de gestion de wordpress. Aller sur le panneau de gestion des plugins <strong>Extensions->Ajouter</strong>.</br>
+Ici, cliquer en haut sur <strong>Téléverser une extension</strong> puis séléctionner le fichier du plugin.
+
+<h2>Manuellement</h2>
+Pour une installation manuelle, télécharger le fichier. Rendez-vous ensuite dans le dossier d'installation de votre site Wordpress. Rentrer dans le fichier <strong>wp-content->plugins</strong> et déposer votre fichier dans un nouveau dossier. Le nom que vous lui donner importe peu, rester simple, je conseille "devis".
