@@ -24,5 +24,5 @@ Pour une installation manuelle, télécharger le fichier. Rendez-vous ensuite da
 Activer le pour maintenant pouvoir profiter de ses fonctionnalités.</br>
 
 # Condition d'utilisation
-<h2>La page <<Accueil>> </h2>
-<h2>La page <<Editeur>> </h2>
+<h2>La page Accueil </h2>
+<h2>La page Editeur </h2>
