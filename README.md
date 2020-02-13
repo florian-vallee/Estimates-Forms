@@ -20,4 +20,9 @@ Pour installer le plugin, télécharger les fichiers. Compresser les fichiers da
 Ici, cliquer en haut sur <strong>Téléverser une extension</strong> puis séléctionner le fichier du plugin.
 
 <h2>Manuellement</h2>
-Pour une installation manuelle, télécharger le fichier. Rendez-vous ensuite dans le dossier d'installation de votre site Wordpress. Rentrer dans le fichier <strong>wp-content->plugins</strong> et déposer votre fichier dans un nouveau dossier. Le nom que vous lui donner importe peu, rester simple, je conseille "devis".
+Pour une installation manuelle, télécharger le fichier. Rendez-vous ensuite dans le dossier d'installation de votre site Wordpress. Rentrer dans le fichier <strong>wp-content->plugins</strong> et déposer votre fichier dans un nouveau dossier. Le nom que vous lui donner importe peu, rester simple, je conseille "devis". Il devrait normallement apparaitre dans les menus de Wordpress. Regarder dans le menu <strong>Extension->Extensions installées</strong>.</br>
+Activer le pour maintenant pouvoir profiter de ses fonctionnalités.</br>
+
+# Condition d'utilisation
+<h2>La page <<Accueil>> </h2>
+<h2>La page <<Editeur>> </h2>
