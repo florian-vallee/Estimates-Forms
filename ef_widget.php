@@ -159,7 +159,32 @@ class Ef_widget extends WP_Widget {
                         </div>
                     </div>
                 </form>
+                <div class="container">
+                    <div class="d-flex flex-column" >
+                        <button type="button" class="btn btn-custom-send" data-toggle="collapse" data-target="#div_collapse-send" aria-expanded="false" aria-controls="div_collapse-send">Obtenir un récapitulatif</button>
+                        <div class="collapse mt-3" id="div_collapse-send">
+                            <form action="send.php" method="POST">
+                                <div class="d-flex flex-column"></div>
+                                <div class="row">
+                                    <div class="col"><label for="mail-client">Saisissez votre E-mail (requis):</label></div>
+                                    <div class="col"><input type="email" class="form-text" name="mail-client" id="mail-client" required></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col"><label for="tel-client">Saisissez votre numéro de téléphone (optionnel):</label></div>
+                                    <div class="col"><input type="tel" name="mail-client" id="tel-client" pattern="[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}"></div>
+                                </div>
+                                <div class="row">
+                                    <input type="text" name="mail-host" id="mail-host" hidden value="clppro28@gmail.com">
+                                </div>
+                                
+                                
+                                <button type="submit" class="btn btn-info">Envoyer le récapitulatif</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
+            
             <?php
 
             echo $args['after_widget'];
