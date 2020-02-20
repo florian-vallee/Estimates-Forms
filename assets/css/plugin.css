@@ -4,17 +4,23 @@
 .paragraphe_info{
     font-size: 16px;
 }
-.ef_widget_container_class{
-    border: solid black 1px;
-    border-radius: 5px;
-    margin-top: 1em;
-    margin-bottom: 1em;
-}
+
+/* Class css pour la conteneur du Formulaire */
 .widget{
-    background-color: #39848c;
+    background-color: #39848cb0;
     border-radius: 5px;
     color: white!important;
 }
 .widget-title{
     text-align: center;
+}
+.btn-custom-send{
+    background-color: #e73567e7!important;
+    color: white!important;
+}
+.form-block-end{
+    margin-block-end: 0.5em!important;
+}
+.widget-title-custom{
+    color: white!important;
 }

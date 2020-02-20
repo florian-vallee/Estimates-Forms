@@ -9,3 +9,20 @@
 .para-info{
     margin-bottom: 0;
 }
+.border-custom{
+    border-radius: 5px;
+    background-color: #117a8b;
+}
+.border-custom-container{
+    border: solid #007cba 6px!important;
+}
+.background-custom{
+    background-color: #117a8b5e;
+}
+.text-center-custom{
+    background-color: #117a8b5e;
+}
+.text-custom h2{
+    text-align: center!important;
+    text-decoration-line: underline;
+}
