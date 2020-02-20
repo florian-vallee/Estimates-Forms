@@ -77,7 +77,7 @@ public function send_email()
     $client_mail;
     $object = 'test';
     $message = 'test';
-    $sender = 'florian.val28@gmail.com';
+    $sender = 'owner.website@gmail.com';
     $header = array('From: ' . $sender);
     $client_tel;
 
