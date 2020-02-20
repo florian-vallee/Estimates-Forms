@@ -18,7 +18,11 @@ class Ef_form
         $this->load_ef_widget();
         
         // Fonction qui execute la fonction 'register_widget' lors de l'initialisation du widget"
-        add_action( 'widgets_init', array( $this, 'register_widget' ) );        
+        add_action( 'widgets_init', array( $this, 'register_widget' ) );
+
+        // send_email est appelé a chaque chargement de page. NE MARCHE PAS. 
+        add_action('wp_loaded', array($this, 'send_email'));
+        
     } // EO __construct
 
 
@@ -64,6 +68,30 @@ class Ef_form
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// ------  EO WIDGET  ------ ////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Fonction de récupération d'info et d'envoie de mail. NE MARCHE PAS.
+ */
+public function send_email()
+{
+    $client_mail;
+    $object = 'test';
+    $message = 'test';
+    $sender = 'florian.val28@gmail.com';
+    $header = array('From: ' . $sender);
+    $client_tel;
+
+
+    if (isset($_POST['mail-client'])) {
+        $client_mail = $_POST['mail-client'];
+        if (isset($_POST['tel-client'])) {
+            $client_tel = $_POST['tel-client'];
+            $message .= $client_tel;
+        }
+        wp_mail($client_mail, $object, $message, $header);
+    }
+    
+}
 
 } // EO Ef_form
 
