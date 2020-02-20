@@ -9,7 +9,7 @@ class Ef_widget extends WP_Widget {
             'Estimates form',
             array(
                 'description'   => 'Un formulaire d\'estimation de prix selon les champs désigner.',
-                'classname'     => 'container',
+                'classname'     => 'container mt-3 pb-2',
             )
         );
     }
@@ -46,7 +46,7 @@ class Ef_widget extends WP_Widget {
 
             ?>
             <div id="container_form" class="container">
-                <form method="POST" action="" id="<?php echo $data_form->id_form; ?>" class="<?php echo $data_form->css_class; ?> pb-2">
+                <form method="POST" action="" id="<?php echo $data_form->id_form; ?>" class="form-block-end <?php echo $data_form->css_class; ?>">
                     <p><?php echo $instance['description'] ?></p>
                     <?php 
                     $select_input = "SELECT * FROM {$wpdb->prefix}ef_input_settings WHERE `input_id_form` = '{$id_form}'";
@@ -146,20 +146,42 @@ class Ef_widget extends WP_Widget {
                         } // EO foreach
                     } // EO if
                     ?>
-
-                    <br>
-                    <div class="btn btn-primary d-flex">
-                        <div class="col-4">
-                            <p class="mt-auto mb-auto border-right">Total:</p>
-                        </div>
-                        <div class="col-8">
-                           
-                            <p id="total_area" class="mt-auto mb-auto"> 0€ </p>
-                        
+                    <div class="container">
+                        <div class="btn btn-primary d-flex">
+                            <div class="col-4">
+                                <p class="mt-auto mb-auto border-right">Total:</p>
+                            </div>
+                            <div class="col-8">
+                            
+                                <p id="total_area" class="mt-auto mb-auto"> 0€ </p>
+                            
+                            </div>
                         </div>
                     </div>
                 </form>
+                <div class="container">
+                    <div class="d-flex flex-column" >
+                        <button type="button" class="btn btn-custom-send" data-toggle="collapse" data-target="#div_collapse-send" aria-expanded="false" aria-controls="div_collapse-send">Obtenir un récapitulatif</button>
+                        <div class="collapse mt-3" id="div_collapse-send">
+                            <form action="" method="POST">
+                                <div class="row">
+                                    <div class="col"><label for="mail-client">Saisissez votre E-mail (requis):</label></div>
+                                    <div class="col"><input type="email" class="form-text" name="mail-client" id="mail-client" required></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col"><label for="tel-client">Saisissez votre numéro de téléphone (optionnel):</label></div>
+                                    <div class="col"><input type="tel" name="tel-client" id="tel-client" pattern="[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}[0-9]{2}"></div>
+                                </div>
+                                <div class="row">
+                                    <input type="text" name="mail-host" id="mail-host" hidden value="">
+                                </div>
+                                <button type="submit" class="btn btn-info">Envoyer le récapitulatif</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
+            
             <?php
 
             echo $args['after_widget'];
