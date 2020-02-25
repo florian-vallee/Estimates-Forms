@@ -1,5 +1,4 @@
 <?php
-
 class Ef_widget extends WP_Widget {
     
     public function __construct()

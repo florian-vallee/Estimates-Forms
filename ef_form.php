@@ -1,6 +1,7 @@
 <?php
-include_once plugin_dir_path( __FILE__ ).'/ef_widget.php';
-
+/**
+ * Class nous permettant de pouvoir charger la class ef_widget, d'enregistrer par la suite le widget comme composant et par la suite de pouvoir envoyer le mail de récapitulatif.
+ */
 class Ef_form
 {
     /**
@@ -76,9 +77,9 @@ public function send_email()
 {
     $client_mail;
     $object = 'test';
-    $message = 'test';
-    $sender = 'owner.website@gmail.com';
-    $header = array('From: ' . $sender);
+    $message = 'test hivucyic';
+    $sender = '';
+    $header = array();
     $client_tel;
 
 
@@ -88,7 +89,7 @@ public function send_email()
             $client_tel = $_POST['tel-client'];
             $message .= $client_tel;
         }
-        wp_mail($client_mail, $object, $message, $header);
+        mail($client_mail, $object, $message, $header);
     }
     
 }

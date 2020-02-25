@@ -8,18 +8,24 @@ License: GPL2
 */
 
 /**
- * Le but de ce fichier et en particulier de cette sera de charger les fichiers nécessaire au chargement du plugin.
+ * Le but de ce fichier et en particulier de cette classe est de charger les fichiers nécessaires au chargement du plugin et d'executer les fonctions principales du plugin.
  */
 class Ef_core_plugin
 {
     /**
-     * Cette variable nous servira à instancier un objet d'une autre class dans cette class.
+     * Cette variable nous servira à instancier un objet d'une autre classe dans cette class.
      * @var $ef_form
      */
     public $ef_form = null;
 
     /**
-     * Constructeur de class, avec initialisation du menu d'administration
+     * Cette variable nous servira à instancier un objet d'une autre classe dans cette classe.
+     * @var $ef_queries
+     */
+    public $ef_queries = null;
+    
+    /**
+     * Constructeur de classe, avec initialisation du menu d'administration
      */
     public function __construct()
     {
@@ -27,8 +33,6 @@ class Ef_core_plugin
         $this->load_ef_form();
 
         $this->load_ef_queries();
-
-        //$this->ef_register_settings_custom_table();
         
         // On ajoute la fonction qui nous permet d'ajouter une page de menu.
         add_action('admin_menu', array($this, 'ef_add_admin_menu'));
@@ -87,7 +91,9 @@ class Ef_core_plugin
         return true;
     }
 
-
+    /**
+     * Fonction qui nous sert à incorporer le fichier ef_query.php et instancier un objet de la class Ef_queries.
+     */
     public function load_ef_queries()
     {
         require_once(plugin_dir_path(__FILE__) . '/ef_query.php');
@@ -124,12 +130,12 @@ class Ef_core_plugin
         register_sidebar(
             array(
                 'name'          => __('Devis widget area', 'textdomain'),
-                'id'            => 'sidebar-1',
+                'id'            => 'main-area-1',
                 'description'   => '',
                 'class'         => 'ef_class_test',
                 'before_widget' => '<div id="%1$s" class="widget %2$s">',
                 'after_widget'  => '</div>',
-                'before_title'  => '<h2 class="widget-title">',
+                'before_title'  => '<h2 class="widget-title widget-title-custom">',
                 'after_title'   => '</h2>',
             )
         );
@@ -146,7 +152,7 @@ class Ef_core_plugin
      * Cette fonciton nous permet de chamger le description et d'ajouter du contenu dans la zone de widget coté admin. 
      */
     public static function dynamic_sidebar_before($index) {
-        if (substr($index, 0, strlen('sidebar-1')) === 'sidebar-1') {
+        if (substr($index, 0, strlen('main-area-1')) === 'main-area-1') {
             echo '<div class="description">Display this widget area in your theme with: <pre style="white-space: pre-wrap;overflow:hidden;">&lt;?php dynamic_sidebar(\'' . $index . '\'); ?&gt;</pre></div>';
         }
 
@@ -217,7 +223,7 @@ class Ef_core_plugin
          */
         add_settings_section(
             'ef_formulaire_section',
-            'Paramètres d\'édition du formulaire',
+            'Création du formulaire d\'estimation de devis',
             array($this, 'form_section_html'),
             'ef_formulaire_settings'
         );
@@ -239,6 +245,10 @@ class Ef_core_plugin
             )
         );
 
+        /**
+         * Permet d'ajouter des champs dans la section "ef_formulaire_section".
+         * add_settings_field( string $id, string $title, callable $callback, string $page, string $section = 'default', array $args = array() )
+         */
         add_settings_field(
             'ef_formulaire_id',
             'ID du formulaire',
@@ -250,6 +260,10 @@ class Ef_core_plugin
                 )
         );
 
+        /**
+         * Permet d'ajouter des champs dans la section "ef_formulaire_section".
+         * add_settings_field( string $id, string $title, callable $callback, string $page, string $section = 'default', array $args = array() )
+         */
         add_settings_field(
             'ef_formulaire_css',
             'Classe css additionnel',
@@ -288,7 +302,7 @@ class Ef_core_plugin
         
         
         /**
-         * Permet d'ajouter des champs dans la section "ef_input_name".
+         * Permet d'ajouter des champs dans la section "ef_input_section".
          * add_settings_field( string $id, string $title, callable $callback, string $page, string $section = 'default', array $args = array() )
          */        
         add_settings_field(
@@ -303,7 +317,7 @@ class Ef_core_plugin
         );
 
         /**
-         * Permet d'ajouter des champs dans la section "ef_input_valeur".
+         * Permet d'ajouter des champs dans la section "ef_input_section".
          * add_settings_field( string $id, string $title, callable $callback, string $page, string $section = 'default', array $args = array() )
          */        
         add_settings_field(
@@ -318,7 +332,7 @@ class Ef_core_plugin
         );
 
         /**
-         * Permet d'ajouter des champs dans la section "ef_input_id".
+         * Permet d'ajouter des champs dans la section "ef_input_section".
          * add_settings_field( string $id, string $title, callable $callback, string $page, string $section = 'default', array $args = array() )
          */
         add_settings_field(
@@ -333,7 +347,7 @@ class Ef_core_plugin
         );
 
         /**
-         * Permet d'ajouter des champs dans la section "ef_input_id_form".
+         * Permet d'ajouter des champs dans la section "ef_input_section".
          * add_settings_field( string $id, string $title, callable $callback, string $page, string $section = 'default', array $args = array() )
          */
         add_settings_field(
@@ -348,7 +362,7 @@ class Ef_core_plugin
         );
 
         /**
-         * Permet d'ajouter des champs dans la section "ef_input_type".
+         * Permet d'ajouter des champs dans la section "ef_input_section".
          * add_settings_field( string $id, string $title, callable $callback, string $page, string $section = 'default', array $args = array() )
          */
         add_settings_field(
@@ -363,7 +377,7 @@ class Ef_core_plugin
         );
         
         /**
-         * Permet d'ajouter des champs dans la section "ef_input_css".
+         * Permet d'ajouter des champs dans la section "ef_input_section".
          * add_settings_field( string $id, string $title, callable $callback, string $page, string $section = 'default', array $args = array() )
          */
         add_settings_field(
@@ -374,6 +388,21 @@ class Ef_core_plugin
             'ef_input_section',
             array(
                 'label_for' => 'ef_input_css'
+                )
+        );
+
+        /**
+         * Permet d'ajouter des champs dans la section "ef_input_section".
+         * add_settings_field( string $id, string $title, callable $callback, string $page, string $section = 'default', array $args = array() )
+         */
+        add_settings_field(
+            'ef_input_description',
+            'Rajoutez une description',
+            array($this, 'input_description_html'),
+            'ef_input_settings',
+            'ef_input_section',
+            array(
+                'label_for' => 'ef_input_description'
                 )
         );
         
@@ -393,7 +422,7 @@ class Ef_core_plugin
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////---------------------- Rendu input FORMULAIRE --------------------------------////////////////////
+////////////////////////---------------------- Rendu input ADMNI --------------------------------////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -495,14 +524,29 @@ class Ef_core_plugin
         <?php
     }
 
+    /**
+     * Fonction de rendu de l'input 'ef_input_description'
+     */
+    public function input_description_html()
+    {
+        ?>
+        <div class="d-flex">
+            <input type="text" name="ef_input_option[ef_input_description]" value=""/>
+            <p class="para-admin">
+               Cette description sert à guider l'utilisateur du formulaire d'estimation.
+            </p>
+        </div>
+        <?php
+    }
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////---------------------- EO Rendu input FORMULAIRE --------------------------------////////////////////
+////////////////////////---------------------- EO Rendu input ADMIN --------------------------------////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//------------------------------- Rendu input FORMULAIRE ----------------------------------------------//
+//------------------------------- RENDU Création du formulaire d'estimation de devis ADMIN ------------//
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -512,7 +556,7 @@ class Ef_core_plugin
     {
         ?>
         <div>
-            <h5>Renseigner les informations nécessaire pour le formulaire.</h5>
+            <h5>Renseigner les informations nécessaire pour construire la base du formulaire d'estimation de devis.</h5>
             <div class="d-flex flex-column">
                 <p class="para-info">Pour <strong>le nom et l'ID</strong> il est conseillé de  prendre sur ce model: </p>
                 <p class="para-info">Nom: "Exemple de nom"</p>
@@ -567,11 +611,11 @@ class Ef_core_plugin
     }
     
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
-//------------------------------- EO Rendu input FORMULAIRE -------------------------------------------//
+//---------------------------- EO RENDU Création du formulaire d'estimation de devis ADMIN ------------//
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////// ------  RENDER INPUT SETTINGS  ------ /////////////////////////////////////////////
+///////////////////////////////// ------  RENDER page ADMIN  ------ /////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -631,7 +675,7 @@ class Ef_core_plugin
 
     /**
      * Cette fonction affiche la page d'édition de formulaire du plugin dans wordpress.
-     * Le formulaire doit appeler le fichier wp-admin/options.php lors de la soumission des données pour enregistrer les données dans la table des options
+     * Le formulaire doit appeler le fichier wp-admin/options.php lors de la soumission des données pour enregistrer les données dans la table des options de la base de données wordpress. 
      */
     public function ef_submenu_html()
     {   
@@ -652,21 +696,29 @@ class Ef_core_plugin
         echo '<h1>'.get_admin_page_title().'</h1>';
         echo '<p>Bienvenue sur la page d\'édition du plugin</p>'; 
         
-        ?>   
+        ?>
+        <div class="background-custom text-custom container rounded border-custom-container mb-3">
+        <!-- Ici on commence l'affichage du formulaire qui enregistre les caractéristiques du devis que l'on souhaite. -->
         <form method="post" action="options.php">
             <?php settings_fields('ef_formulaire_settings') ?>
             <?php do_settings_sections('ef_formulaire_settings') ?>
             <?php submit_button($text = null, $type = 'primary', $name = 'submit-ef_formulaire_settings'); ?>
-        </form>
+        </form></div>
+        <!-- Fin du premier formulaire pour les caractéristiques du devis. -->
+        <div class="container d-flex justify-content-lg-between">
+            <!-- Bouton qui ouvre le bloc qui permet de voir l'ensemble des différentes configurations de devis et qui permet la modification ou la suppression des éléments. -->
+            <button class="btn btn-info mb-4" id="btn_display_config" type="button" data-toggle="collapse" data-target="#div_collapse-see_config" aria-expanded="false" aria-controls="div_collapse-see_config">
+                Modifier les configurations
+            </button>
+            <!-- Bouton qui permet l'affichage du bloc permettant l'ajout d'un nouveau input. -->
+            <button class="btn btn-info mb-4" id="btn_display_add_input" type="button" data-toggle="collapse" data-target="#div_collapse-add_input" aria-expanded="false" aria-controls="div_collapse-add_input">
+                + Ajouter un input
+            </button>
 
-        <button class="btn btn-info mb-4" id="btn_display_config" type="button" data-toggle="collapse" data-target="#div_collapse-see_config" aria-expanded="false" aria-controls="div_collapse-see_config">
-            Modifier les configurations
-        </button>
+        </div>
+        
 
-        <button class="btn btn-info mb-4" id="btn_display_add_input" type="button" data-toggle="collapse" data-target="#div_collapse-add_input" aria-expanded="false" aria-controls="div_collapse-add_input">
-            + Ajouter un input
-        </button>
-
+        <!-- Ici on commence l'affichage du bloc qui contient le formulaire de création d'un nouvel input. -->
         <div class="collapse" id="div_collapse-add_input">            
             <form action="options.php" method="post">
                 <?php settings_fields('ef_input_settings') ?>
@@ -674,8 +726,11 @@ class Ef_core_plugin
                 <?php submit_button($text = null, $type = 'primary', $name = 'submit-ef_input_settings'); ?>
             </form>                  
         </div>
+        <!-- Fin du deucieme formulaire pour les caractéristiques de l'input. -->
 
+        <!-- Ici on commence l'affichage du bloc qui affiche les caractéristiques des différentes configurations. -->
         <div class="collapse" id="div_collapse-see_config">
+            <!-- Conteneur principale des blocs qui constituent l'affichage de la configuration courante. -->
             <div class="d-flex flex-wrap justify-content-between">
                 <?php
                 // On vérifie si il existe bien des configuration en BDD. 
@@ -683,61 +738,66 @@ class Ef_core_plugin
                     foreach ($form_datas as $data) {
                         $nbr_config += 1; 
                         $nbr_input = 0;                     
-                ?>
-                        <div class="col-12 border-info border rounded mb-3" style="border: solid #007cba 6px!important;">
-                            
-                            <h5 class="text-center mb-3 mt-1">Configuration n°<?php echo $nbr_config; ?>: <?php echo $data->nom; ?></h5>
-                            <p>Vous pouvez ici changer les informations concernant ce formulaire puis en validant en appuyant sur "Modifier le formulaire".</p>                 
-                            <div class="d-flex flex-column">                        
-                                
-                                <div class="d-flex flex-column">
-                                    
+                ?>      
+                        <!-- Ici on commence l'affichage du bloc qui affiche LA configuration COURANTE, celle-ci est voué à être répété autant de fois que le nombre de configuration. -->
+                        <div class="container rounded border-custom-container p-0 mb-3">
+                            <!-- Ici on commence l'affichage du bloc qui contient l'ensemble des données de la configuration. -->
+                            <div class="d-flex flex-column">
+                                <!-- Ici on commence l'affichage du bloc qui contient le formulaire d'update des caractéristiques du formulaire ET le bloc qui contient les boutons "modifier les inputs" et "Delete confoguration". -->
+                                <div class="d-flex flex-column background-custom">
+                                    <!-- Ici on commence l'affichage du bloc Titre et Description. -->
+                                    <div class="text-center">
+                                        <span style="text-decoration-line: underline;">
+                                            <h4 class="mb-3 mt-1">Configuration n° <?php echo $nbr_config; ?>: <?php echo $data->nom; ?></h4>
+                                        </span>
+                                        <p>Vous pouvez ici changer les informations concernant ce formulaire puis en validant en appuyant sur "Modifier le formulaire".</p>
+                                    </div>
+                                    <!-- Formulaire d'update des caractéristiques du formulaire. -->
                                     <form action="admin-post.php" method="POST">
-                                        
+                                        <!-- Bloc label/input ID Form. -->
                                         <div class="d-flex mb-2">
-                                            <div class="col-4 text-left"><label for="id_form">ID:</label></div>
+                                            <div class="col-4 text-left"><label for="id_form">ID du formulaire:</label></div>
                                             <div class="col-8 text-center"><input type="text" name="new_id_form" id="id_form<?php echo "-" . $nbr_config; ?>" value="<?php echo $data->id_form; ?>"></div>
                                         </div>
-                                        
+                                        <!-- Bloc label/input Nom Form. -->
                                         <div class="d-flex mb-2">
-                                            <div class="col-4 text-left"><label for="new_name">Nom:</label></div>
+                                            <div class="col-4 text-left"><label for="new_name">Nom du formulaire:</label></div>
                                             <div class="col-8 text-center"><input type="text" name="new_name" id="name_form<?php echo "-" . $nbr_config; ?>" value="<?php echo $data->nom; ?>"></div>
                                         </div>
-                                        
+                                        <!-- Bloc label/input css additionnel Form. -->
                                         <div class="d-flex mb-2">
                                             <div class="col-4 text-left"><label for="new_css">CSS additionnel:</label></div>
                                             <div class="col-8 text-center"><input type="text" name="new_css" id="css_form<?php echo "-" .  $nbr_config; ?>" value="<?php echo $data->css_class; ?>"></div>
                                         </div>
-
-                                        <div class="mb-2">
-                                            
+                                        <!-- Bloc bouton submit "Modifier le formulaire". -->
+                                        <div class="pl-2 mb-2">                                            
                                             <input type="text" name="update_by_form_id" id="update_by_form_id-<?php echo '-' . $nbr_config; ?>" value="<?php echo $data->id_form; ?>" hidden>
                                             <input type="hidden" id="hidden_update_field-<?php echo $nbr_config; ?>" name="action" value="ef_update_config">
                                             <input class="btn btn-success mr-2" type="submit" value="Modifier le formulaire">
-                                            
                                         </div>
 
                                     </form>
                                     
-
-                                    <div class="d-flex flex-row mb-4 justify-content-between">                                        
-                                        <div class="">
-                                            <button class="btn btn-info" id="btn_display_input_config-<?php echo $nbr_config; ?>" type="button" data-toggle="collapse" data-target="#div_collapse-input_config_<?php echo $nbr_config; ?>" aria-expanded="false" aria-controls="div_collapse-input_config_<?php echo $nbr_config; ?>">
-                                                Modifier les inputs
-                                            </button>
-                                        </div>
-                                        <div class="">
-                                            <form action="admin-post.php" method="POST">
-                                                <input type="text" name="delet_by_form_id" id="delet_by_form_id-<?php echo '-' . $nbr_config; ?>" value="<?php echo $data->id_form; ?>" hidden>
-                                                <input type="hidden" id="hidden_field-<?php echo $nbr_config; ?>" name="action" value="ef_delete_config">
-                                                <input class="btn btn-danger mr-2" type="submit" value="Delete configuration">
-                                            </form>
-                                        </div>
+                                    <!-- Div qui contient les boutons "modifier les inputs" et "Delete confoguration". -->
+                                    <div class="d-flex flex-row mb-4 pl-2 pr-2 justify-content-between">                                        
+                                        <!-- Bouton "Modifier les inputs", C'est un bouton qui permet l'affichage des inputs du formulaire en question. -->
+                                        <button class="btn btn-info" id="btn_display_input_config-<?php echo $nbr_config; ?>" type="button" data-toggle="collapse" data-target="#div_collapse-input_config_<?php echo $nbr_config; ?>" aria-expanded="false" aria-controls="div_collapse-input_config_<?php echo $nbr_config; ?>">
+                                            Modifier les inputs
+                                        </button>
+                                        <!-- Bouton "Delete configuration", C'est un formulaire qui permet la suppression du formulaire en question. -->
+                                        <form action="admin-post.php" method="POST">
+                                            <input type="text" name="delet_by_form_id" id="delet_by_form_id-<?php echo '-' . $nbr_config; ?>" value="<?php echo $data->id_form; ?>" hidden>
+                                            <input type="hidden" id="hidden_field-<?php echo $nbr_config; ?>" name="action" value="ef_delete_config">
+                                            <input class="btn btn-danger" type="submit" value="Delete configuration">
+                                        </form>
+                                        
                                     </div>
                                 
-                                </div> <!-- EO DIV class="d-flex flex-column" DATA FORM -->
-                                
+                                </div>
+                                <!-- Fin du bloc qui contient le formulaire d'update des caractéristiques du formulaire ET le bloc qui contient les boutons. -->
+                                <!-- Div collapse activer/désactiver par le bouton "Modifier les inputs". Il contient les inputs. -->
                                 <div class="collapse" id="div_collapse-input_config_<?php echo $nbr_config; ?>">                                
+                                    <!-- Conteneur principale des inputs -->
                                     <div class="d-flex flex-column">
                                         <?php 
                                         // On vérifie s'il existe bien des inputs en BDD
@@ -750,51 +810,64 @@ class Ef_core_plugin
                                                     $nbr_compt += 1;
                                                     //var_dump($data_input);
                                                     ?>
-                                                
-                                                    <div class="d-flex flex-column mb-4 mt-4">
-                                                        
-                                                        <h5> Input n°<?php echo $nbr_input; echo ': ' . $data_input->nom; ?></h5>
-
-                                                        <form action="admin-post.php" method="post">
+                                                    <!-- Bloc qui contient 1 inputs et qui se répéte en boucle tant qu'il y a des inputs appartenant à ce formulaire -->
+                                                    <div class="d-flex flex-column mt-4 pt-2 pb-2 background-custom">
+                                                        <!-- Bloc titre de l'input. -->
+                                                        <div class="text-center mb-3">
+                                                            <h4>
+                                                                <span style="text-decoration-line: underline;">Input n° <?php echo $nbr_input; echo ': ' . $data_input->nom; ?></span>
+                                                            </h4>
+                                                        </div>
+                                                        <!-- Formulaire d'update de l'input. -->
+                                                        <form action="admin-post.php" method="POST">
+                                                            <!-- Bloc Label/input ID du formulaire d'appartenance -->
                                                             <div class="d-flex mb-2">
-                                                                <div class="col"><label for="input_id_form<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">ID du formulaire d'appartenance:</label></div>
+                                                                <div class="col border-right border-dark"><label for="input_id_form<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">ID du formulaire d'appartenance:</label></div>
                                                                 <div class="col"><input type="text" name="input_id_form" id="input_id_form<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>" placeholder="<?php echo  $data_input->input_id_form; ?>"></div>
                                                             </div>
-
+                                                            <!-- Bloc Label/input Nom de l'input -->
                                                             <div class="d-flex mb-2">
-                                                                <div class="col"><label for="name_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">Nom de l'input:</label></div>
+                                                                <div class="col border-right border-dark"><label for="name_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">Nom de l'input:</label></div>
                                                                 <div class="col"><input type="text" name="name_input" id="name_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>" value="<?php echo $data_input->nom; ?>"></div>
                                                             </div>
-
+                                                            <!-- Bloc Label/input Type de l'input.-->
                                                             <div class="d-flex mb-2">
-                                                                <div class="col"><label for="type_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">Type de l'input:</label></div>
+                                                                <div class="col border-right border-dark"><label for="type_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">Type de l'input:</label></div>
                                                                 <div class="col"><input type="text" name="type_input" id="type_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>" value="<?php echo $data_input->input_type; ?>"></div>
+                                                            </div>
+                                                            <!-- Bloc Label/input Description de l'input.-->
+                                                            <div class="d-flex mb-2">
+                                                                <div class="col border-right border-dark"><label for="description_value<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">Description de l'input:</label></div>
+                                                                <div class="col"><input type="text" name="description_value" id="description_value<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>" value="<?php echo $data_input->input_description; ?>"></div>
                                                             </div>
                                                             
                                                             <?php 
                                                             if ($data_input->input_type !== "select" || $data_input->input_type !== "range") {
                                                             ?>
+                                                                <!-- Si l'input n'est pas de type "select" ou "range" on rajoute cette section, Bloc Label/input valeur pour l'input et son calcul dans le devis.-->
                                                                 <div class="d-flex mb-2">
-                                                                    <div class="col"><label for="value_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">Valeur attribué à l'input pour le calcul des champs:</label></div>
+                                                                    <div class="col border-right border-dark"><label for="value_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">Valeur attribué à l'input pour le calcul des champs lors de l'estimation de devis:</label></div>
                                                                     <div class="col"><input type="number" name="value_input" id="value_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>" value="<?php echo $data_input->input_valeur; ?>"></div>
                                                                 </div>
                                                             <?php
                                                             }
                                                             ?>
+                                                            <!-- Bloc Label/input css additionnel -->
                                                             <div class="d-flex mb-2">
-                                                                <div class="col"><label for="css_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">Classe CSS supplémenatire:</label></div>
+                                                                <div class="col border-right border-dark"><label for="css_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">Classe CSS supplémenatire:</label></div>
                                                                 <div class="col"><input type="text" name="css_input" id="css_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>" value="<?php echo $data_input->css_class; ?>"></div>
                                                             </div>
-
+                                                            <!-- Bloc Label/input ID input-->
                                                             <div class="d-flex mb-2">
-                                                                <div class="col"><label for="id_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">ID de l'input:</label></div>
+                                                                <div class="col border-right border-dark"><label for="id_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">ID de l'input:</label></div>
                                                                 <div class="col"><input type="text" name="id_input" id="id_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>" value="<?php echo $data_input->id_input; ?>"></div>
                                                             </div>
                                                             <?php 
                                                             if ($data_input->input_type === "select") {
                                                                 ?>
+                                                                <!-- Si le type est "select", Bloc Label/input Ajout des options-->
                                                                 <div class="d-flex mb-2">
-                                                                    <div class="col">
+                                                                    <div class="col border-right border-dark">
                                                                         <label for="option_input<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">Ajouter des options pour le select:</label>
                                                                     </div>
                                                                     <div class="d-flex col">
@@ -802,8 +875,9 @@ class Ef_core_plugin
                                                                         <span class="ml-2">Format pour les options: "option1-option2-..."</span>
                                                                     </div>                                                                
                                                                 </div>
+                                                                <!-- Si le type est "select", Bloc Label/input Ajout des valeurs correspondantes aux options. -->
                                                                 <div class="d-flex mb-2">
-                                                                    <div class="col">
+                                                                    <div class="col border-right border-dark">
                                                                         <label for="option_input_value<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">Ajouter les valeurs correspondante aux option ci-dessus:</label>
                                                                     </div>
                                                                     <div class="col">
@@ -815,17 +889,19 @@ class Ef_core_plugin
 
                                                             if ($data_input->input_type === "range") {
                                                                 ?>
+                                                                <!-- Si le type est "range", Bloc Label/input Ajout des options-->
                                                                 <div class="d-flex mb-2">
-                                                                    <div class="col">
-                                                                        <label for="range_input_value<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">Ajouter des options pour le select:</label>
+                                                                    <div class="col border-right border-dark">
+                                                                        <label for="range_input_value<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">Ajouter des options pour le range:</label>
                                                                     </div>
                                                                     <div class="d-flex col">
                                                                         <input type="text" name="range_value" id="range_input_value<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>" value="<?php echo $data_input->range_value; ?>">
                                                                         <span class="ml-2">Adopter ce <strong>format</strong> pour rentrer vos valeurs numérique: "ValeurInitiale-ValeurMinimale-ValeurMaximale-ValeurDuPas" <strong>Ex: 10-0-150-5</strong></span>
                                                                     </div>                                                                
                                                                 </div>
+                                                                <!-- Si le type est "select", Bloc Label/input Ajout de la valeur qui sera multiplié par le nombre (option)-->
                                                                 <div class="d-flex mb-2">
-                                                                    <div class="col">
+                                                                    <div class="col border-right border-dark">
                                                                         <label for="price_one_value<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>">Ajouter une valeur unitaire <strong>(une valeur pour 1)</strong> pour le calcul:</label>
                                                                     </div>
                                                                     <div class="d-flex col">
@@ -835,41 +911,47 @@ class Ef_core_plugin
                                                                 <?php
                                                             }
                                                             ?>
-                                                            
-                                                            <div class="d-flex mb-2">
-                                                                <div>
-                                                                    <input type="text" name="update_by_input_id" id="update_by_input_id-<?php echo $nbr_config . "_" . $nbr_compt; ?>" value="<?php echo $data_input->id_input; ?>" hidden>
-                                                                    <input type="hidden" id="hidden_field_update-<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>" name="action" value="ef_update_input">
-                                                                    <input class="btn-success btn" type="submit" value="Mettre à jours l'input n°<?php echo $nbr_compt; ?>.">
-                                                                </div>
+                                                            <!-- Bouton update -->
+                                                            <div class="col">
+                                                                <input type="text" name="update_by_input_id" id="update_by_input_id-<?php echo $nbr_config . "_" . $nbr_compt; ?>" value="<?php echo $data_input->id_input; ?>" hidden>
+                                                                <input type="hidden" id="hidden_field_update-<?php echo '-' . $nbr_config . '-' . $nbr_compt; ?>" name="action" value="ef_update_input">
+                                                                <input class="btn-success btn" type="submit" value="Mettre à jours l'input n° <?php echo $nbr_compt; ?>">
                                                             </div>
-                                                            
                                                         </form>
-
+                                                        <!-- Fin du formulaire d'update de l'input. -->
+                                                        <!-- Bloc qui contient le formulaire de supression de l'input. -->
                                                         <div class="col text-right">
+                                                            <!-- Formulaire dissimuler par le bouton "Delete input" qui permet la suppression de l'input en BDD. -->
                                                             <form action="admin-post.php" method="POST">
                                                                 <input type="text" name="delet_by_input_id" id="delet_by_input_id-<?php echo $nbr_config . "_" . $nbr_compt; ?>" value="<?php echo $data_input->id_input; ?>" hidden>
                                                                 <input type="hidden" id="hidden_field_delet_input-<?php echo $nbr_config . "_" . $nbr_compt; ?>" name="action" value="ef_delete_input">
-                                                                <input class="btn btn-danger mr-2" type="submit" value="Delete input">
+                                                                <input class="btn btn-danger" type="submit" value="Delete input">
                                                             </form>
                                                         </div>
-
-                                                    </div> <!-- EO DIV class="d-flex flex-column"  DATA INPUT CONTAINER ROW -->                                        
+                                                            
+                                                            
+                                                        
+                                                    </div>
+                                                    <!-- Fin du bloc qui contient 1 input. -->
                                                 <?php
                                                 } // IF ($data_input->input_id_form === $data->id_form)
                                             } // EO FOREACH ($input_datas as $data_input)
                                         } // EO IF (isset($input_datas))
                                         ?>                                        
-                                    </div> <!-- EO DIV class="d-flex flex-column"  DATA INPUT CONTAINER ALL INPUT SETTING -->
+                                    </div>
+                                    <!-- Fin du conteneur principale des inputs -->
                                 </div>
-                            </div> <!--EO DIV class="d-flex flex-column" -->
-                        </div><!--EO  DIV class="col-5 border-info border rounded mr-3 mb-2" -->
+                                <!-- Fin du bloc collapse qui contient les inputs -->
+                            </div> <!-- Fin Conteneur  qui contient l'ensemble des données de la configuration.-->
+                        </div>
+                        <!-- Fin de l'affichage du bloc qui affiche affiche LA configuration COURANTE. -->
                     <?php
                     } // EO FOREACH
                 } // EO IF (isset($form_data))
                 ?>
-            </div> <!--EO DIV class="d-flex flex-wrap justify-content-between" -->
-        </div><!--EO DIV class="collapse" -->
+            </div> <!-- Fin Conteneur principale. -->
+        </div>
+        <!-- Fin de l'affichage du bloc qui affiche les caractéristiques des différentes configurations. -->
 
 
 
@@ -886,7 +968,11 @@ class Ef_core_plugin
 ///////////////////////////////// ------  FORM CUSTOM SUBMIT  ------ ////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+    /**
+     * Fonction permettant la suppression de la configuration (données formulaire + données inputs).
+     * Elle est appelé lors d'un submit.
+     * <input class="btn btn-danger mr-2" type="submit" value="Delete configuration"> <---- voici l'input correspondant.
+     */
     public function ef_delete_config()
     {
         global $wpdb;
@@ -902,6 +988,11 @@ class Ef_core_plugin
         die();
     }
 
+    /**
+     * Fonction permettant la suppression d'un input.
+     * Elle est appelé lors d'un submit.
+     * <input class="btn btn-danger mr-2" type="submit" value="Delete input"> <---- voici l'input correspondant.
+     */
     public function ef_delete_input()
     {
         global $wpdb;
@@ -915,6 +1006,11 @@ class Ef_core_plugin
         die();
     }
 
+    /**
+     * Fonction permettant l'update des caractéristiques d'un formulaire.
+     * Elle est appelé lors d'un submit.
+     * <input class="btn btn-success mr-2" type="submit" value="Modifier le formulaire"> <---- voici l'input correspondant.
+     */
     public function ef_update_config()
     {   
         global $wpdb;
@@ -932,6 +1028,11 @@ class Ef_core_plugin
         die();        
     }
 
+    /**
+     * Fonction permettant l'update d'un input.
+     * Elle est appelé lors d'un submit.
+     * <input class="btn-success btn" type="submit" value="Mettre à jours l'input n°<?php echo $nbr_compt; ?>."> <---- voici l'input correspondant.
+     */
     public function ef_update_input()
     {
         global $wpdb;
@@ -948,25 +1049,13 @@ class Ef_core_plugin
             $new_option_value   = $_POST['option_value'];
             $new_range_value    = $_POST['range_value'];
             $new_price_for_one  = $_POST['price_one'];
+            $new_description    = $_POST['description_value'];
 
             if (empty($new_value)) {
                  $new_value = 0;
              }
-            $sql = "UPDATE {$wpdb->prefix}ef_input_settings SET `id_input`= '{$new_id}',`nom`= '{$new_name}',`input_type`= '{$new_type}',`input_valeur`= {$new_value},`css_class`= '{$new_css}' WHERE `id_input`= '{$old_id}'";
+            $sql = "UPDATE `{$wpdb->prefix}ef_input_settings` SET `id_input`= '{$new_id}',`nom`= '{$new_name}',`input_type`='{$new_type}',`input_valeur`= '{$new_value}',`css_class`= '{$new_css}', `option_input`= '{$new_option}',`option_value`= '{$new_option_value}',`range_value`='{$new_range_value}',`price_for_one`= '{$new_price_for_one}',`input_description`= '{$new_description}'  WHERE `id_input`= '{$old_id}'";
             $wpdb->query($sql);
-
-            // On vérifie si il y as des option de rentrée
-            if (isset($new_option)) {
-                
-                $request = "UPDATE {$wpdb->prefix}ef_input_settings SET `option_input`= '{$new_option}', `option_value` = '{$new_option_value}' WHERE `id_input`= '{$old_id}'";
-                $wpdb->query($request);
-            }
-
-            // On vérifie si il y a des option pour l'input range de rentrée
-            if(isset($new_range_value)) {
-                $requete = "UPDATE {$wpdb->prefix}ef_input_settings SET `range_value`= '{$new_range_value}', `price_for_one` = '{$new_price_for_one}' WHERE `id_input`= '{$old_id}'";
-                $wpdb->query($requete);
-            }
         }
         wp_redirect(admin_url('admin.php?page=ef_submenu_editor'));
         die();
@@ -1022,12 +1111,13 @@ class Ef_core_plugin
         $dir_js = plugins_url('assets/js/plugin.js', __FILE__);
         $dir_jquery_js = plugins_url('assets/js/jquery-3.4.1.js', __FILE__);
         $dir_bootstrap_js = plugins_url('assets/js/bootstrap.min.js', __FILE__);
-
+        wp_enqueue_style('plugin_css', $dir_css);
+        wp_enqueue_style('plugin_bootstrap_css', $dir_bootstrap_css);
         wp_enqueue_script('plugin_js', $dir_js);
-        wp_enqueue_script('plugin_bootstrap_js', $dir_bootstrap_js);
         wp_enqueue_script('plugin_jquery.js', $dir_jquery_js);
-        wp_enqueue_style('plugin_css', $dir_css);
-        wp_enqueue_style('plugin_css', $dir_css);
+        wp_enqueue_script('plugin_bootstrap_js', $dir_bootstrap_js);
+        
+        
     }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1037,7 +1127,7 @@ class Ef_core_plugin
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////// ------  INITIALISATION DES TABLEs DU PLUGIN  ------ //////////////////////////////
+////////////////////////////////// ------  INITIALISATION DES TABLES DU PLUGIN  ------ //////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
@@ -1051,7 +1141,7 @@ class Ef_core_plugin
         global $wpdb;
 
         $wpdb->query("CREATE TABLE IF NOT EXISTS {$wpdb->prefix}ef_formulaire_settings (id_form VARCHAR(255) PRIMARY KEY, nom VARCHAR(255) NOT NULL, css_class VARCHAR(255));");
-        $wpdb->query("CREATE TABLE IF NOT EXISTS {$wpdb->prefix}ef_input_settings (id_input VARCHAR(255) PRIMARY KEY, nom VARCHAR(255) NOT NULL, input_type VARCHAR(150), input_valeur INT NOT NULL, css_class VARCHAR(255), input_id_form VARCHAR(255) NOT NULL, FOREIGN KEY (input_id_form) REFERENCES {$wpdb->prefix}ef_formulaire_settings(id_form), option_input VARCHAR(300), option_value VARCHAR (300), range_value VARCHAR (300), price_for_one VARCHAR (12) );");
+        $wpdb->query("CREATE TABLE IF NOT EXISTS {$wpdb->prefix}ef_input_settings (id_input VARCHAR(255) PRIMARY KEY, nom VARCHAR(255) NOT NULL, input_type VARCHAR(150), input_valeur INT NOT NULL, css_class VARCHAR(255), input_id_form VARCHAR(255) NOT NULL, FOREIGN KEY (input_id_form) REFERENCES {$wpdb->prefix}ef_formulaire_settings(id_form), option_input VARCHAR(300), option_value VARCHAR (300), range_value VARCHAR (300), price_for_one VARCHAR (12), input_description VARCHAR (300) );");
     
     }
 
@@ -1089,6 +1179,7 @@ class Ef_core_plugin
 
 } // EO class Ef_core_plugin
 
+// On instancie un objet de la class Ef_core_plugin pour lancer les fonctionnalités du plugin. 
 $Ef_core_plugin = new Ef_core_plugin();
 
 ?>
