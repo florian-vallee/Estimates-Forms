@@ -6,6 +6,8 @@
   var old_select_value  = 0;
   // Ancienne valeur de l'input range. 
   var old_range_value   = 0;
+  // Ancienne valeur de l'input number.
+  var old_value  = 0;
   // ------------------------------------------------------------------------------------------------------
 
   // --------------------------------------     FONCTIONS DE CALCUL ---------------------------------------
@@ -19,14 +21,14 @@
     var total = document.getElementById("total_area");
 
     // To change the "checked" value to true or false and the text on the button. 
-    if (element.className === 'btn btn-danger') {
-      element.className = 'btn btn-primary';
-      element.textContent = 'Oui';
+    if (element.className === 'btn btn-danger' || element.className === 'btn btn-danger far fa-frown-open') {
+      element.className = 'btn btn-primary far fa-smile-wink';
+      element.textContent = ' Oui';
       checkbox.setAttribute('checked', 'true');
     }
     else {
-      element.className = 'btn btn-danger';
-      element.textContent = 'Non';
+      element.className = 'btn btn-danger far fa-frown-open';
+      element.textContent = ' Non';
       checkbox.removeAttribute('checked', 'false');
     }
 
@@ -78,4 +80,21 @@
     old_range_value = result;
   }
 
+  // For number calcul
+  function numberValue(elmnt) {
+    var value         = Number(elmnt.value);
+    var input_value   = elmnt.getAttribute('valeur');
+    var number_id     = elmnt.id;
+    console.log(number_id);
+    var result        = value*input_value;
+    var total         = document.getElementById("total_area");
+    var prix = 0;
+    // On ajoute au prix la valeur correspondante, et on soustrait l'ancienne valeur. 
+    prix = result + old_value;
+    // On insère le resultat dans la zone approprié. 
+    total.innerHTML = prix + "€";
+
+    // On assigne la valeur en tant qu'ancienne valeur à la fin du traitement. 
+    old_value = result;
+  }
   // ------------------------------------------------------------------------------------------------------

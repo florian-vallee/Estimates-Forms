@@ -9,6 +9,10 @@
 .para-info{
     margin-bottom: 0;
 }
+.para-danger{
+    color: red;
+    font-weight: 800;
+}
 .border-custom{
     border-radius: 5px;
     background-color: #117a8b;
